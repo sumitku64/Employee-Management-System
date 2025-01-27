@@ -1,35 +1,41 @@
+import axios from "axios";
 import React, { createContext, useContext, useEffect, useState } from "react";
-import axiosInstance from "../utils/api";
 
-const AuthContext = createContext();
+const userContext = createContext();
 
-export const AuthProvider = ({ children }) => {
+const authContext = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const token = localStorage.getItem("token");
-      if (token) {
-        try {
-          const res = await axiosInstance.get("/auth/verify", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          setUser(res.data.user);
-        } catch (error) {
-          console.log(error);
+    const verifyUser = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (token) {
+          const response = await axios.get(
+            "http://localhost:5000/api/auth/verify",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          if (response.data.success) {
+            setUser(response.data.user);
+          }
+        } else {
           setUser(null);
-        } finally {
-          setLoading(false);
+          setLoading(false)
         }
-      } else {
-        setLoading(false)
+      } catch (error) {
+        if (error.response && !error.response.data.error) {
+          setUser(null);
+        }
+      } finally {
+        setLoading(false);
       }
     };
-
-    fetchUser();
+    verifyUser();
   }, []);
 
   const login = (user) => {
@@ -40,13 +46,12 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     localStorage.removeItem("token");
   };
-
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <userContext.Provider value={{ user, login, logout, loading }}>
       {children}
-    </AuthContext.Provider>
+    </userContext.Provider>
   );
 };
 
-export const useAuth = () => useContext(AuthContext);
-export default AuthProvider;
+export const useAuth = () => useContext(userContext);
+export default authContext;

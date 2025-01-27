@@ -1,114 +1,40 @@
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
-import multer from "multer";
-import path from "path";
+import bcrypt from "bcrypt";
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "public/images");
-  },
-  filename: (req, file, cb) => {
-    cb(
-      null,
-      file.fieldname + "_" + Date.now() + path.extname(file.originalname)
-    );
-  },
-});
-export const upload = multer({
-  storage: storage,
-});
-
-// Register route
-export const Register = async (req, res) => {
-  try {
-    const { username, password } = req.body;
-    const file = req.file.filename;
-    const userExists = await User.findOne({ username });
-
-    if (userExists) return res.status(400).json({ msg: "User already exists" });
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    const newUser = new User({
-      username,
-      password: hashedPassword,
-      image: file,
-    });
-    await newUser.save();
-
-    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
-    });
-
-    res.status(200).json({
-      msg: "success",
-      token,
-      user: { id: newUser._id, username: newUser.username },
-    });
-  } catch (err) {
-    console.log(err);
-    return res.status(500).json(err);
-  }
-};
-
-// Login route
-export const login = async (req, res) => {
+const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-
     const user = await User.findOne({ email });
     if (!user) {
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
+      return res.status(404).json({ success: false, error: "User Not Found" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid credentials" });
+      return res.status(404).json({ success: false, error: "Wrong Password" });
     }
 
     const token = jwt.sign(
-      { userId: user._id, role: user.role },
+      { _id: user._id, role: user.role },
       process.env.JWT_SECRET,
-      {
-        expiresIn: "5d",
-      }
+      { expiresIn: "10d" } 
     );
 
-    return res.status(200).json({
-      success: true,
-      message: "Login successful",
-      token,
-      user: {
-        _id: user._id,
-        email: user.email,
-        role: user.role,
-        name: user.name
-      },
-    });
+    return res
+      .status(200)
+      .json({
+        success: true, 
+        token,
+        user: { _id: user._id, name: user.name, role: user.role },
+      });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: 'Server error',
-    });
+    res.status(500).json({success: false, error: error.message})
   }
 };
 
-export const verify = async (req, res) => {
-  try {
-    return res.status(200).json({
-      success: true,
-      message: "User Verified",
-      user: req.user,
-    });
-  } catch(error) {
-    return res.status(500).json({
-      success: false,
-      message: 'Server error',
-    });
-  }
-};
+const verify = (req, res) =>{
+    return res.status(200).json({success: true, user: req.user})
+}
+
+export { login, verify };

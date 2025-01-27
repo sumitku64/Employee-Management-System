@@ -1,38 +1,31 @@
 import mongoose from "mongoose";
-import { Schema } from "mongoose";
 import Employee from "./Employee.js";
 import Leave from "./Leave.js";
 import Salary from "./Salary.js";
+import User from './User.js'
 
-const departmentSchema = new Schema({
-  name: { type: String, required: true, unique: true },
-  description: { type: String },
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now },
-});
+const departmentSchema = new mongoose.Schema({
+    dep_name: {type: String, required: true},
+    description: {type: String},
+    createdAt: {type: Date, default: Date.now},
+    updatedAt: {type: Date, default: Date.now}
+})
 
-departmentSchema.pre('deleteOne', { document: true, query: false }, async function (next) {
-  try {
-    // Find all employees in this department
-    const employees = await Employee.find({ department: this._id });
+departmentSchema.pre("deleteOne", {document: true, query: false}, async function(next) {
+    try {
+        const employees = await Employee.find({department: this._id})
+        const empIds = employees.map(emp => emp._id)
+        const userIds = employees.map(emp => emp.userId); 
 
-    // Extract employee IDs
-    const employeeIds = employees.map(emp => emp._id);
+        await Employee.deleteMany({department: this._id})
+        await Leave.deleteMany({employeeId: {$in : empIds}})
+        await Salary.deleteMany({employeeId: {$in : empIds}})
+        await User.deleteMany({ _id: { $in: userIds } });
+        next()
+    } catch(error) {
+        next(error)
+    }
+})
 
-    // Delete all employees in this department
-    await Employee.deleteMany({ department: this._id });
-
-    // Delete leaves associated with these employees
-    await Leave.deleteMany({ employeeId: { $in: employeeIds } });
-
-    // Delete payroll records associated with these employees
-    await Salary.deleteMany({ employeeId: { $in: employeeIds } });
-
-    next();
-  } catch (error) {
-    next(error);
-  }
-});
-
-const Department = mongoose.model("Department", departmentSchema);
+const Department = mongoose.model("Department", departmentSchema)
 export default Department;

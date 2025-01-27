@@ -1,48 +1,45 @@
-import Employee from '../models/Employee.js';
 import Salary from '../models/Salary.js'
+import Employee from '../models/Employee.js'
 
 const addSalary = async (req, res) => {
-  const { employeeId, basicSalary, allowances, deductions, payDate } = req.body;
-  const totalSalary = parseInt(basicSalary) + parseInt(allowances) - parseInt(deductions);
+    try {
+        const {employeeId, basicSalary, allowances, deductions, payDate} = req.body
 
-  try {
-    // Create a new department
-    const newSalary = new Salary({
-        employeeId, basicSalary, allowances, deductions, netSalary: totalSalary, payDate
-    });
+        const totalSalary = parseInt(basicSalary) + parseInt(allowances) - parseInt(deductions)
 
-    // Save department to the database
-    await newSalary.save();
+        const newSalary = new Salary({
+            employeeId,
+            basicSalary,
+            allowances,
+            deductions,
+            netSalary: totalSalary,
+            payDate
+        })
 
-    res.status(201).json({success:true, message: 'Salary added successfully' });
-  } catch (error) {
-    console.error('Error adding department:', error);
-    res.status(500).json({ success:false, error: 'Server error '+error.message });
-  }
-};
+        await newSalary.save()
 
-const getEmployees = async (req, res) => {
-    const {id} = req.params;
-  try {
-    const employees = await Employee.find({department: id})
-    res.status(201).json({success:true, employees });
-  } catch (error) {
-    console.error('Error getting employees:', error);
-    res.status(500).json({ success:false, error: 'Server error '+error.message });
-  }
+        return res.status(200).json({success: true})
+
+    } catch(error) {
+        return res.status(500).json({success: false, error: "salary add server error"})
+    }
 }
 
 const getSalary = async (req, res) => {
-  try {
-    const {id} = req.params;
-    console.log(id)
-    const employee = await Employee.findOne({userId: id})
-    const salary = await Salary.find({employeeId: employee._id}).populate('employeeId', 'employeeId')    
-    res.status(201).json({success:true, salary });
-  } catch (error) {
-    console.error('Error editing employee:', error);
-    res.status(500).json({ success:false, error: 'Server error '+error.message });
-  }
+    try {
+        const {id, role} = req.params;
+        
+        let salary
+        if(role === "admin") {
+            salary = await Salary.find({employeeId: id}).populate('employeeId', 'employeeId')
+        } else {
+            const employee = await Employee.findOne({userId: id})
+            salary = await Salary.find({employeeId: employee._id}).populate('employeeId', 'employeeId')
+        }
+        return res.status(200).json({success: true, salary})
+    } catch(error) {
+        return res.status(500).json({success: false, error: "salary get server error"})
+    }
 }
 
-export {getEmployees, addSalary, getSalary}
+export {addSalary, getSalary}

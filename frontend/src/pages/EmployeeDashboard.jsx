@@ -1,20 +1,18 @@
-import { Outlet } from "react-router-dom";
-import Navbar from "../components/Navbar";
-import EmpSidebar from "../components/EmpSidebar";
+import React from 'react'
+import Sidebar from '../components/EmployeeDashboard/Sidebar'
+import {Outlet} from 'react-router-dom'
+import Navbar from '../components/dashboard/Navbar'
 
 const EmployeeDashboard = () => {
   return (
-    <>
-      <div className="flex">
-        <EmpSidebar />
-
-        <div className="flex-1 ml-16 md:ml-64 bg-gray-100 h-screen">
-          <Navbar />
-          <Outlet />
-        </div>
+    <div className='flex'>
+      <Sidebar />
+      <div className='flex-1 ml-64 bg-gray-100 h-screen'>
+        <Navbar />
+        <Outlet />
       </div>
-    </>
-  );
-};
+    </div>
+  )
+}
 
-export default EmployeeDashboard;
+export default EmployeeDashboard

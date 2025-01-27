@@ -1,13 +1,11 @@
-import express from 'express';
-import authMiddleware from '../middleware/authMiddleware.js'
-import {getEmployees, addSalary, getSalary} from '../controllers/salaryController.js';
+import express from 'express'
+import authMiddleware from '../middleware/authMiddlware.js'
+import { addSalary, getSalary } from '../controllers/salaryController.js'
 
-const router = express.Router();
+const router = express.Router()
 
-router.post('/add', authMiddleware, addSalary);
-router.get('/employees/:id', authMiddleware, getEmployees);
-router.get('/:id', authMiddleware, getSalary);
-// router.put('/:id', authMiddleware, updateLeave);
-// router.delete('/:id', authMiddleware, deleteDepartment);
+router.post('/add', authMiddleware, addSalary)
+router.get('/:id/:role', authMiddleware, getSalary) 
+
 
 export default router

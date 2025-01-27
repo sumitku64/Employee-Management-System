@@ -1,11 +1,10 @@
-import express from 'express';
-import authMiddleware from '../middleware/authMiddleware.js'
-import { login, Register, upload, verify } from '../controllers/authController.js';
+import express from 'express'
+import { login, verify } from '../controllers/authController.js'
+import authMiddleware from '../middleware/authMiddlware.js'
 
-const router = express.Router();
+const router = express.Router()
 
-// router.post('/register',upload.single('image'), Register);
-router.post('/login', login);
-router.get('/verify',authMiddleware, verify)
+router.post('/login', login)
+router.get('/verify', authMiddleware, verify)
 
-export default router
+export default router;
