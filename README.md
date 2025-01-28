@@ -7,6 +7,7 @@ This project is an Employee Management System built using the MERN stack (MongoD
    - **Department Management:** Manages departments and assigns employees to them.
    - **Leave Management:** Handles employee leave requests and admin approvals.
    - **Salary Management:** Manages employee salary records.
+   - **Attendance Management:** Manages employee attendance.
    - **Settings:** Allows users to manage their profile and password.
    - **Utilities:** Handles reusable components like private routes and role-based access.
 
@@ -52,7 +53,7 @@ To run this project locally, follow these steps:
 
    # Start the frontend server
    cd frontend
-   npm start
+   npm run dev
    ```
 
 ## Contributing
