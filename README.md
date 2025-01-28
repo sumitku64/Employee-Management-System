@@ -17,6 +17,9 @@ This project is an Employee Management System built using the MERN stack (MongoD
 ## Demo
 https://youtu.be/P_L-06VRcBI
 
+## How to Clone and Run Project
+https://youtu.be/pEccfGmgrVY
+
 ## Installation
 To run this project locally, follow these steps:
 
