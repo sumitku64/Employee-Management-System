@@ -74,7 +74,7 @@ const Attendance = () => {
         </p>
         <Link
           to="/admin-dashboard/attendance-report"
-          className="px-4 py-1 bg-teal-600 rounded text-white"
+          className="px-4 py-1 bg-blue-900 rounded text-white"
         >
           Attendance Report
         </Link>

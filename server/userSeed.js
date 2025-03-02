@@ -13,6 +13,7 @@ const userRegister = async () => {
             role: "admin"
         })
         await newUser.save()
+        console.log("Account Created")
     } catch(error) {
         console.log(error)
     }
