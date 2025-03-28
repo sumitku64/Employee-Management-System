@@ -49,7 +49,7 @@ export const AttendanceHelper = ({status, employeeId, statusChange}) => {
           <button
             className="px-4 py-2 bg-green-500 text-white"
             onClick={() => markEmployee("present", employeeId)}>
-            Present
+            Present.
           </button>
           <button
             className="px-4 py-2 bg-red-500 text-white"
