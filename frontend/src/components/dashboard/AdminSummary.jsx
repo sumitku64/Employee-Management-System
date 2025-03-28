@@ -46,7 +46,7 @@ const AdminSummary = () => {
           icon={<FaUsers />}
           text="Total Employees"
           number={summary.totalEmployees}
-          color="bg-teal-600"
+          color="bg-blue-600"
         />
         <SummaryCard
           icon={<FaBuilding />}
@@ -57,7 +57,7 @@ const AdminSummary = () => {
         <SummaryCard
           icon={<FaMoneyBillWave />}
           text="Monthly Salary"
-          number={`$${summary.totalSalary}`}
+          number={`₹${summary.totalSalary}`}
           color="bg-red-600"
         />
       </div>
@@ -70,7 +70,7 @@ const AdminSummary = () => {
             icon={<FaFileAlt />}
             text="Leave Applied"
             number={summary.leaveSummary.appliedFor}
-            color="bg-teal-600"
+            color="bg-blue-600"
           />
           <SummaryCard
             icon={<FaCheckCircle />}

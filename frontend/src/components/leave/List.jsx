@@ -51,7 +51,7 @@ const List = () => {
         {user.role === "employee" && (
           <Link
             to="/employee-dashboard/add-leave"
-            className="px-4 py-1 bg-teal-600 rounded text-white"
+            className="px-4 py-1 bg-blue-600 rounded text-white"
           >
             Add New Leave
           </Link>

@@ -97,7 +97,7 @@ const Setting = () => {
 
         <button
           type="submit"
-          className="w-full mt-6 bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
+          className="w-full mt-6 bg-blue-600 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded"
         >
           Change Password
         </button>

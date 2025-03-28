@@ -39,7 +39,7 @@ const Login = () => {
   return (
     <div
       className="flex flex-col items-center h-screen justify-center 
-    bg-gradient-to-b from-teal-600 from-50% to-gray-100 to-50% space-y-6"
+    bg-gradient-to-b from-blue-600 from-50% to-gray-100 to-50% space-y-6"
     >
       <h2 className="font-pacific text-3xl text-white">
         Employee Management System
@@ -77,14 +77,14 @@ const Login = () => {
               <input type="checkbox" className="form-checkbox" />
               <span className="ml-2 text-gray-700">Remember me</span>
             </label>
-            <a href="#" className="text-teal-600">
+            <a href="#" className="text-blue-600">
               Forgot password?
             </a>
           </div>
           <div className="mb-4">
             <button
               type="submit"
-              className="w-full bg-teal-600 text-white py-2 "
+              className="w-full bg-blue-600 text-white py-2 "
             >
               Login
             </button>
